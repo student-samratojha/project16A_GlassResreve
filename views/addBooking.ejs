@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlassReserve - <%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #050505;
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 100% 100%, rgba(147, 51, 234, 0.15) 0%, transparent 45%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 text-slate-200">
+    <div class="w-full max-w-2xl glass-card rounded-[2rem] p-10">
+        <div class="mb-10 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-blue-600/15 border border-blue-500/30 mb-6">
+                <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6l4 2"></path></svg>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-white mb-2">GlassReserve - <%= title %></h1>
+            <p class="text-slate-400 text-sm">Select a component and choose your booking dates.</p>
+        </div>
+
+        <% if (typeof success !== 'undefined' && success == '1') { %>
+            <div class="bg-green-600/20 text-white p-4 rounded-3xl mb-6 border border-green-500/20">Booking added successfully!</div>
+        <% } %>
+
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+            <% components.forEach(component => { %>
+                <div class="glass-card rounded-[1.5rem] p-6">
+                    <% if (component.image) { %>
+                        <img src="<%= component.image %>" alt="<%= component.name %>" class="w-full h-48 object-cover rounded-2xl mb-4">
+                    <% } %>
+                    <h3 class="text-xl font-bold text-white mb-2"><%= component.name %></h3>
+                    <p class="text-blue-400 text-sm font-medium mb-1"><%= component.type %></p>
+                    <p class="text-slate-400 text-sm mb-4"><%= component.description %></p>
+                    <form action="/booking/add" method="POST" class="space-y-4">
+                        <input type="hidden" name="componentId" value="<%= component._id %>">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">From Date</label>
+                            <input type="date" name="startDate" required class="w-full bg-white/5 border border-white/10 rounded-3xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">To Date</label>
+                            <input type="date" name="endDate" required class="w-full bg-white/5 border border-white/10 rounded-3xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition-all">
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-3xl transition duration-300 shadow-lg shadow-blue-600/20">Book Now</button>
+                    </form>
+                </div>
+            <% }); %>
+        </div>
+
+        <p class="mt-8 text-center text-slate-400">Back to <a href="/secure/user" class="text-blue-400 hover:text-blue-300 font-medium">Dashboard</a></p>
+    </div>
+</body>
+</html>
